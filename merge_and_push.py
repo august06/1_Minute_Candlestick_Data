@@ -1,7 +1,18 @@
 import os
+import sys
 import glob
 import subprocess
 from datetime import datetime
+
+# Đảm bảo mã hóa UTF-8 cho stdout/stderr trên Windows (tránh lỗi charmap crash khi chạy từ Node.js)
+if sys.platform == "win32":
+    try:
+        if hasattr(sys.stdout, 'reconfigure'):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        if hasattr(sys.stderr, 'reconfigure'):
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 MASTER_FILE = os.path.join(DIR_PATH, "XAUUSD_M1_RAW_MASTER.csv")
