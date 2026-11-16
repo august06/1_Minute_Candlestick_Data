@@ -42,26 +42,30 @@ def merge_and_push():
     count_before = len(existing_records)
     print(f"📊 Số nến M1 hiện có trong Master: {count_before:,} nến")
 
-    # 2. Quét tất cả các file CSV khác trong thư mục để tìm nến mới ghép vào
-    csv_files = glob.glob(os.path.join(DIR_PATH, "*.csv"))
+    # 2. Quét tất cả các file CSV khác trong thư mục hiện tại VÀ thư mục cha MQL5\Files
+    parent_dir = os.path.dirname(DIR_PATH)
+    csv_files = glob.glob(os.path.join(DIR_PATH, "*.csv")) + glob.glob(os.path.join(parent_dir, "*.csv"))
     new_candles_added = 0
 
-    for file_path in csv_files:
+    for file_path in set(csv_files):
         if os.path.basename(file_path) == "XAUUSD_M1_RAW_MASTER.csv":
             continue
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            f.readline() # Bỏ qua header
-            for line in f:
-                line_str = line.strip()
-                if not line_str:
-                    continue
-                parts = line_str.split(",")
-                if len(parts) >= 6:
-                    key = f"{parts[0].strip()}_{parts[1].strip()}"
-                    if key not in existing_records:
-                        existing_records[key] = line_str
-                        new_candles_added += 1
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                f.readline() # Bỏ qua header
+                for line in f:
+                    line_str = line.strip()
+                    if not line_str:
+                        continue
+                    parts = line_str.split(",")
+                    if len(parts) >= 6:
+                        key = f"{parts[0].strip()}_{parts[1].strip()}"
+                        if key not in existing_records:
+                            existing_records[key] = line_str
+                            new_candles_added += 1
+        except Exception as e:
+            print(f"⚠️ Bỏ qua {os.path.basename(file_path)} do đang bị khóa: {e}")
 
     print(f"➕ Đã phát hiện và ghép thêm: {new_candles_added:,} nến M1 mới!")
     total_candles = len(existing_records)
