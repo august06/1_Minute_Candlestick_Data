@@ -1,0 +1,7 @@
+# Keep only the consolidated master CSV dataset
+*.csv
+!XAUUSD_M1_RAW_MASTER.csv
+
+# Python cache
+__pycache__/
+*.pyc
