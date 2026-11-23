@@ -48,7 +48,7 @@ def merge_and_push():
     new_candles_added = 0
 
     for file_path in set(csv_files):
-        if os.path.basename(file_path) == "XAUUSD_M1_RAW_MASTER.csv":
+        if os.path.basename(file_path) in ("XAUUSD_M1_RAW_MASTER.csv", "XAUUSD_M1_DUKASCOPY_MASTER.csv"):
             continue
 
         try:
