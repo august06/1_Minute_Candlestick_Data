@@ -2,6 +2,8 @@
 *.csv
 !XAUUSD_M1_RAW_MASTER.csv
 !XAUUSD_M1_DUKASCOPY_MASTER.csv
+!BTCUSD_M1_RAW_MASTER.csv
+!BTCUSD_M1_DUKASCOPY_MASTER.csv
 
 # Python cache
 __pycache__/
